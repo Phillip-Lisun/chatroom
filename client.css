@@ -181,7 +181,7 @@ body {
     padding: 1%;
 
     font-size: 23px;
-    
+
     justify-content: right;
     align-items: center;
 
@@ -228,11 +228,11 @@ body {
 }
 
 .availableRooms {
-    display: none;
+    display: block;
 }
 
 .createRoom {
-    display: block;
+    display: none;
     justify-content: center;
 
 }
