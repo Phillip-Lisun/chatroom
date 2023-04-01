@@ -30,6 +30,10 @@
 
                <div id="message" class="message">Phillip: Message</div>
 
+               <div class="userMessage">Message</div>
+
+               
+
 
 
             </div>
@@ -106,23 +110,7 @@
       <button id="sendMessage">send</button>
       <div id="chatlog"></div> -->
 
-      <script type ="text/javascript">
-
-         var socketio = io.connect();
-         socketio.on("message_to_client",function(data) {
-            //Append an HR thematic break and the escaped HTML of the new message
-            document.getElementById("chatlog").appendChild(document.createElement("hr"));
-            document.getElementById("chatlog").appendChild(document.createTextNode(data['message']));
-         });
-   
-         function sendMessage(){
-            var msg = document.getElementById("message_input").value;
-            socketio.emit("message_to_server", {message:msg});
-         }
-   
-         <!-- document.getElementById("sendMessage").addEventListener('click', sendMessage, false); -->
-   
-         </script>
+      <script src="clientJS.js"></script>
 
 
    </body>
