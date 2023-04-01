@@ -1,0 +1,50 @@
+body {
+    margin: 0%;
+    background-color: #2C3639;
+}
+
+
+.smallButton {
+
+
+    padding: 1%;
+    margin-top: 1%;
+    border: 1px solid #2C3333;
+    background-color: #A27B5C;
+    color: #3F4E4F;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    width: 2cm;
+    height: 0.75cm;
+    text-align: center;
+
+}
+
+.smallButton:hover {
+    cursor: pointer;
+    background-color: #DCD7C9;
+    color: #3F4E4F;
+}
+
+.setUsername {
+    display: flex;
+    float: center;
+    border: 4px solid #DCD7C9;
+    margin: 10%;
+    align-items: center;
+
+
+}
+
+#username {
+    display: flex;
+    float: center;
+
+}
+
+#usernameButton {
+    display: flex;
+    float: center;
+}
+
+/* https://colorhunt.co/palette/2c36393f4e4fa27b5cdcd7c9 */
