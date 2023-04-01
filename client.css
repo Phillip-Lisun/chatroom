@@ -3,48 +3,255 @@ body {
     background-color: #2C3639;
 }
 
+.setUsername {
+    display: none;
+    /* border: 4px solid #DCD7C9; */
+    background-color: #ABC4AA;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 15%;
+    margin-bottom: 10%;
+
+    height: 200px;
+    border-radius: 10px;
+
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+}
+
+#username {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 40px;
+    margin-top: 15px;
+    text-align: center;
+
+    margin-left: 20px;
+    margin-right: 20px;
+    width: auto;
+
+    background-color: #fffff4;
+}
+
+#usernameLabel {
+    margin-top: 20px;
+    padding-top: 20px;
+    font-weight: bold;
+    font-size: 35px;
+    color: #3F4E4F;
+}
 
 .smallButton {
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    padding: 1%;
-    margin-top: 1%;
-    border: 1px solid #2C3333;
-    background-color: #A27B5C;
-    color: #3F4E4F;
     font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
-    width: 2cm;
-    height: 0.75cm;
-    text-align: center;
+
+    background-color: #A27B5C;
+    color: #DCD7C9;
+
+    margin-top: 10px;
+    margin-bottom: 5%;
+    margin-left: 35%;
+
+    height: 50px;
+    width: 300px;
+
+    border-radius: 10px;
 
 }
 
 .smallButton:hover {
     cursor: pointer;
-    background-color: #DCD7C9;
+    color: #DCD7C9;
+    background-color: #3F4E4F;
+}
+
+.chatBox {
+    display: block;
+    float: left;
+
+    /* align-items: center; */
+    justify-content: center;
+
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
     color: #3F4E4F;
+
+    margin-left: 7%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+    width: 40%;
+    height: 40rem;
+
+    border-radius: 10px;
+    position: relative;
+
+
+
+    background-color:#DCD7C9;
+
 }
 
-.setUsername {
+.sideBar {
+    display: block;
+    float: right;
+    margin-right: 7%;
+
+    width: 40%;
+    height: 20rem;
+
+    border-radius: 10px;
+
+
+    background-color:#DCD7C9;
+
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    color: #3F4E4F;
+
+
+}
+
+.boxTitle {
     display: flex;
-    float: center;
-    border: 4px solid #DCD7C9;
-    margin: 10%;
+    text-align: center;
+
+    margin-left: 37%;
+    margin-top: 1%;
+}
+
+#sideBarTop {
+    margin-top: 4%;
+
+}
+
+#sideBarBottom {
+    margin-top: 2%;
+    margin-bottom: 8%;
+}
+
+.roomUsers {
+    margin-top: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.roomUser {
+    flex-basis: 15%;
+    margin-bottom: 10px;
+    padding: 2%;
+    text-align: center;
+}
+
+.roomMessages {
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
+.message {
+    margin-top: 1%;
+
+}
+
+.sendMessage {
+    display: flex;
+    justify-content: left;
+    margin-left: 2%;
+
+    position: absolute;
+    bottom: 2%;
+
+
+}
+
+.sendMessageText {
+    text-align: left;
+    border-radius: 10px;
+}
+
+.sendButton {
+    background-color: #3F4E4F;
+    border-radius: 10px;
+    height: 4rem;
+    width: 6rem;
+
+    display: flex;
+    justify-content: center;
     align-items: center;
+    margin-left: 1%;
+    margin-top: 2%;
+
+    color: #ABC4AA;
+}
+
+.sendButton:hover {
+    background-color: #A27B5C;
+    color: #3F4E4F;
+    cursor: pointer;
 
 
 }
 
-#username {
+.availableRooms {
+    display: none;
+}
+
+.createRoom {
+    display: block;
+    justify-content: center;
+
+}
+
+.formEntry {
+    margin-top: 2%;
+    justify-content: center;
+    margin-left: 25%;
+}
+
+.roomPasswordText {
+    margin-top: 1%;
+    font-size: 25px;
+    border-radius: 10px;
+
+
+}
+
+.roomNameText {
+    margin-top: 1%;
+    font-size: 25px;
+    border-radius: 10px;
+
+}
+
+.createRoomButton {
+    background-color: #3F4E4F;
+    border-radius: 10px;
+    height: 3rem;
+    width: 15rem;
+
     display: flex;
-    float: center;
+    justify-content: center;
+    align-items: center;
+    margin-left: 25%;
+    margin-top: 2%;
+
+    color: #ABC4AA;
+}
+
+.createRoomButton:hover {
+    background-color: #A27B5C;
+    color: #3F4E4F;
+    cursor: pointer;
+
 
 }
 
-#usernameButton {
-    display: flex;
-    float: center;
-}
+
 
 /* https://colorhunt.co/palette/2c36393f4e4fa27b5cdcd7c9 */
