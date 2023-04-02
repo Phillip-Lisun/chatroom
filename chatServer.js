@@ -48,7 +48,6 @@ io.sockets.on("connection", function (socket) {
 
 
             io.sockets.to(newRoomId).emit('roomMessage', {roomId: newRoomId, message: "Welcome!"});
-            io.sockets.
 
         }        
 
