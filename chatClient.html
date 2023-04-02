@@ -1,90 +1,91 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
-      <link rel="stylesheet" type="text/css" href="client.css">
-   </head>
-   <body>
 
-        <div id="setUsername" class="setUsername">
+<head>
+   <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
+   <link rel="stylesheet" type="text/css" href="client.css">
+</head>
 
-            <div id="usernameLabel">Set Username: </div>
-            <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea>
-            <div class="smallButton" id="usernameButton">Enter</div>
+<body>
 
-        </div> 
+   <div id="setUsername" class="setUsername">
 
-        <br>
+      <div id="usernameLabel">Set Username: </div>
+      <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea>
+      <div class="smallButton" id="usernameButton">Enter</div>
 
-        <div id="chatBox" class="chatBox">
-         
-            <div class="boxTitle">Current Room: </div>
+   </div>
 
+   <br>
 
-            <div id="roomMessages" class="roomMessages">
-               
-               <div id="message" class="message">Phillip: Message</div>
-               <div id="message" class="message">Phillip: Message</div>
-
-               <div id="message" class="message">Phillip [private]: Message</div>
-
-               <div id="message" class="message">Phillip: Message</div>
-
-               <div class="userMessage">Message</div>
-
-               
+   <div class="mainArea">
 
 
+      <div id="chatBox" class="chatBox">
+         <?xml version="1.0" encoding="utf-8"?>
+         <!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+            <path d="M100,56v5c0,5.3-2.1,10.4-5.9,14.1C90.4,78.9,85.3,81,80,81H50V71h30c2.7,0,5.2-1.1,7.1-2.9c1.9-1.9,2.9-4.4,2.9-7.1v-5
+	c0-2.7-1.1-5.2-2.9-7.1C85.2,47.1,82.7,46,80,46H17.1l10,10L20,63.1L1.5,44.6C0.5,43.6,0,42.4,0,41s0.5-2.6,1.5-3.5L20,19l7.1,7.1
+	l-10,10H80c5.3,0,10.4,2.1,14.1,5.9C97.9,45.6,100,50.7,100,56z" />
+         </svg>
 
-            </div>
+         <div class="boxTitle"><b>Current Room: </b></div>
+         <hr>
 
-            <div class="sendMessage">
+         <div id="roomMessages" class="roomMessages">
 
-               <textarea class="sendMessageText" placeholder="Message" rows="5" cols="50"></textarea><div class="sendButton">Send</div>
-
-
-            </div>
-
-
-        </div>
-
-        <div id="sideBarTop" class="sideBar">
-
-
-         <div class="availableRooms"> 
-
-            <div class="boxTitle" id="availableRoomsTitle">Available Rooms: </div>
-
+            <div class="message">Phillip: Message</div>
+            <div class="message">Phillip: Message</div>
+            <div class="userMessage">Message</div>
+            <div class="message">Phillip [private]: Message</div>
+            <div class="userMessage">Message</div>
 
          </div>
 
+         <hr>
+         <div class="sendMessage">
+            <textarea class="sendMessageText" placeholder="Message" rows="2" cols="50"></textarea>
+            <div class="sendButton">Send</div>
+
+         </div>
+
+         <div class="currRooms">
+            <div class="boxTitle" id="availableRoomsTitle">
+               Available Rooms:
+            </div>
+            <hr>
+            THERE ARE CURRENTLY NO ROOMS! MAKE A ROOM!!
+         </div>
+
+      </div>
+
+      <div class="sideBar">
+
+
          <div class="createRoom">
-          
-            <div class="boxTitle">Create Room</div>
+
+            <div class="boxTitle">Create Room:</div>
 
             <div class="formEntry">
-               <div class="formLabel">Name: </div><textarea class="roomNameText" placeholder="Room Name" rows="1" cols="20"></textarea>
+               <div class="formLabel">Name: </div><textarea class="roomNameText" placeholder="Room Name" rows="1"
+                  cols="20"></textarea>
             </div>
 
             <div class="formEntry">
-               <div class="formLabel">Password: </div><textarea class="roomPasswordText" placeholder="Password (Optional)" rows="1" cols="20"></textarea>
+               <div class="formLabel">Password: </div><textarea class="roomPasswordText"
+                  placeholder="Password (Optional)" rows="1" cols="20"></textarea>
             </div>
 
             <div class="createRoomButton">Create</div>
-
-                  
          </div>
 
+         <hr>
 
-
-        </div>
-
-        <div id="sideBarBottom" class="sideBar">
-
+         <div class="currUsers">
             <div class="boxTitle">Current Room Users: </div>
-
             <div id="roomUsers" class="roomUsers">
-
                <div class="roomUser">Alice</div>
                <div class="roomUser">Phillip</div>
                <div class="roomUser">Alice</div>
@@ -92,26 +93,18 @@
                <div class="roomUser">Alice</div>
                <div class="roomUser">Phillip</div>
                <div class="roomUser">Alice</div>
-
-
-
-         
-
-
             </div>
+         </div>
 
-     </div>
+      </div>
 
-
-
-
-<!-- 
-      <input type="text" id="message_input"/>
-      <button id="sendMessage">send</button>
-      <div id="chatlog"></div> -->
-
-      <script src="clientJS.js"></script>
+   </div>
 
 
-   </body>
+   <script src="clientJS.js"></script>
+
+   </div>
+
+</body>
+
 </html>

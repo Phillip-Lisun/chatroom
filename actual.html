@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <script src="/node_modules/socket.io/client-dist/socket.io.js"></script>
+   <link rel="stylesheet" type="text/css" href="client.css">
+</head>
+
+<body>
+
+   <div id="setUsername" class="setUsername">
+
+      <div id="usernameLabel">Set Username: </div>
+      <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea>
+      <div class="smallButton" id="usernameButton">Enter</div>
+
+   </div>
+
+   <br>
+   <div class="mainArea">
+
+
+      <div id="chatBox" class="chatBox">
+
+         <!-- <div class="boxTitle">Current Room: </div>
+
+
+         <div id="roomMessages" class="roomMessages">
+
+            <div class="message">Phillip: Message</div>
+            <div class="message">Phillip: Message</div>
+
+            <div class="message">Phillip [private]: Message</div>
+
+            <div class="message">Phillip: Message</div>
+
+            <div class="userMessage">Message</div>
+
+         </div>
+
+
+         <div class="sendMessage">
+
+            <textarea class="sendMessageText" placeholder="Message" rows="5" cols="50"></textarea>
+            <div class="sendButton">Send</div>
+
+         </div> -->
+
+
+
+      </div>
+      <div class="sideBar">
+         <div id="sideBarTop">
+
+
+            <div class="availableRooms">
+
+               <div class="boxTitle" id="availableRoomsTitle">
+                  Available Rooms:
+               </div>
+
+
+               <div class="createRoom">
+
+                  <div class="boxTitle">Create Room:</div>
+
+                  <div class="formEntry">
+                     <div class="formLabel">Name: </div><textarea class="roomNameText" placeholder="Room Name" rows="1"
+                        cols="20"></textarea>
+                  </div>
+
+                  <div class="formEntry">
+                     <div class="formLabel">Password: </div><textarea class="roomPasswordText"
+                        placeholder="Password (Optional)" rows="1" cols="20"></textarea>
+                  </div>
+
+                  <div class="createRoomButton">Create</div>
+
+
+               </div>
+
+
+
+            </div>
+
+            <div id="sideBarBottom">
+
+               <div class="boxTitle">Current Room Users: </div>
+
+               <div id="roomUsers" class="roomUsers">
+
+                  <div class="roomUser">Alice</div>
+                  <div class="roomUser">Phillip</div>
+                  <div class="roomUser">Alice</div>
+                  <div class="roomUser">Phillip</div>
+                  <div class="roomUser">Alice</div>
+                  <div class="roomUser">Phillip</div>
+                  <div class="roomUser">Alice</div>
+
+               </div>
+
+            </div>
+         </div>
+
+
+
+
+
+      </div>
+
+
+
+
+      <!-- 
+      <input type="text" id="message_input"/>
+      <button id="sendMessage">send</button>
+      <div id="chatlog"></div> -->
+
+      <script src="clientJS.js"></script>
+
+
+</body>
+
+</html>
