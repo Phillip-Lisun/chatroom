@@ -18,7 +18,7 @@
 
    <br>
 
-   <div class="mainArea">
+   <div class="mainArea" id="mainArea">
 
 
       <div id="chatBox" class="chatBox">
@@ -69,16 +69,16 @@
             <div class="boxTitle">Create Room:</div>
 
             <div class="formEntry">
-               <div class="formLabel">Name: </div><textarea class="roomNameText" placeholder="Room Name" rows="1"
+               <div class="formLabel">Name: </div><textarea id="roomNameText" class="roomNameText" placeholder="Room Name" rows="1"
                   cols="20"></textarea>
             </div>
 
             <div class="formEntry">
                <div class="formLabel">Password: </div><textarea class="roomPasswordText"
-                  placeholder="Password (Optional)" rows="1" cols="20"></textarea>
+                  placeholder="Password (Optional)" rows="1" cols="20" id="roomPasswordText"></textarea>
             </div>
 
-            <div class="createRoomButton">Create</div>
+            <div class="createRoomButton" id="createRoomButton">Create</div>
          </div>
 
          <hr>
@@ -100,7 +100,7 @@
 
    </div>
 
-
+   
    <script src="clientJS.js"></script>
 
    </div>
