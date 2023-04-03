@@ -46,6 +46,7 @@ io.sockets.on("connection", function (socket) {
             let newRoomId = roomIdGen + "";
             roomIdGen++;
 
+
             publicRooms.set(newRoomId, data.createRoomName);
 
             socket.leaveAll();
