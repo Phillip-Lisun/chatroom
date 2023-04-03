@@ -118,9 +118,56 @@ function showAvailRooms() {
     document.getElementById("availRooms").style.display='block';
     document.getElementById("currUsers").style.display = 'none';
 
+}
+
+
+let kickoutClass = document.getElementsByClassName("kickout");
+
+for(let i = 0; i < kickoutClass.length; i++) {
+
+    kickoutClass[i].addEventListener('click', e=> {
+
+        let roomId = e.target.id;
+        // kickout
+        alert("kickout");
+
+        // socket.on('disconnect', function(roomId) {
+
+        //     // delete clients[socket.id];
+        //   });
+    });
 
 
 }
+
+
+let banClass = document.getElementsByClassName("ban");
+
+for(let i = 0; i < banClass.length; i++) {
+
+    banClass[i].addEventListener('click', e=> {
+
+        let roomId = e.target.id;
+        // ban
+        alert("BAN");
+    });
+
+}
+
+let makeAdmin = document.getElementsByClassName("makeAdmin");
+
+for(let i = 0; i < makeAdmin.length; i++) {
+
+    makeAdmin[i].addEventListener('click', e=> {
+
+        let roomId = e.target.id;
+        // makeAdmin
+        alert("admin");
+    });
+
+}
+
+
 
 socketio.on('roomMessage', (data) => {
 
