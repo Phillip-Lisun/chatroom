@@ -3,17 +3,11 @@ const port = 3456;
 
 let roomIdGen = 1;
 
-let allUsers = new Map();
-
-let allRooms = new Map();
-
-let roomUsers = new Map();
-
-let blackList = new Map();
-
-let privateRooms = new Map();
-
-
+let allUsers = new Map(); //username to socket
+let allRooms = new Map(); //roomId to room name
+let roomUsers = new Map(); //roomId to array of users in room
+let blackList = new Map(); //roomId to array of banned users
+let privateRooms = new Map(); //roomId to passwords
 
 let roomList = [];
 let userList = [];
@@ -39,50 +33,24 @@ let rooms = io.of("/").adapter.rooms;
 io.sockets.on("connection", function (socket) {
     // This callback runs when a new Socket.IO connection is established.
 
-    //console.log(socket.id);
-
     updateRooms();
 
     socket.on('logon', function(data) {
 
         username = data.username;
-
         socket.username = username;
-
         allUsers.set(username, socket);
-        //console.log(allUsers);
 
-        //console.log(socket.username);
-
-    });
-
-
-    socket.on('message_to_server', function (data) {
-        // This callback runs when the server receives a new message from the client.
-
-        console.log("message: " + data["message"]); // log it to the Node.JS output
-        io.sockets.emit("message_to_client", { message: data["message"] }) // broadcast the message to other users
     });
 
     socket.on('create_room_request', function(data) {
 
-    
-
         let newRoomId = roomIdGen + "";
         roomIdGen++;
 
-
         allRooms.set(newRoomId, data.createRoomName);
 
-        //socket.leaveAll();
-
         socket.join(newRoomId);
-
-
-        // console.log("Room Joined: " + newRoomId);
-        // console.log(allRooms);
-        
-        // console.log("newRoomId: " + newRoomId);
 
         username = socket.username;
 
@@ -92,32 +60,19 @@ io.sockets.on("connection", function (socket) {
         roomUsers.set(newRoomId, thisRoomUsers);
         //console.log(roomUsers);
         
-
-
         socket.emit('roomMessage', {sender: "Server", message: "Created " + allRooms.get(newRoomId) + "!", roomId: newRoomId});
-        socket.emit('roomAdmin', {roomId: newRoomId});
+        socket.emit('roomAdmin', {roomId: newRoomId}); //sets creator as admin
 
         updateRoomUsers(newRoomId);
 
-
-        //console.log(socket.id);
-
-
-        
         if(data.createRoomPassword != "") {
 
             let pwd = data.createRoomPassword;
-
             privateRooms.set(newRoomId, pwd);
 
         }
 
-
-        //console.log(data.createRoomName + " " + data.createRoomPassword);
-
         updateRooms();
-
-
 
     });
 
@@ -128,11 +83,7 @@ io.sockets.on("connection", function (socket) {
         let message = data.message;
 
         io.sockets.in(roomId).emit('roomMessage', {sender: sender, message: message, roomId: roomId});
-        // console.log(message);
-        // console.log(sender);
-        // console.log(roomId);
         socket.emit("messageAccepted", {message: message});
-    
     
     });
 
@@ -140,49 +91,45 @@ io.sockets.on("connection", function (socket) {
 
         let joiningRoomId;
 
-        for(let [id, roomName] of allRooms.entries()) {
+        for(let [id, roomName] of allRooms.entries()) { //gets room name from room id
             if(roomName == data.roomId) {
                 joiningRoomId = id;
             }
         }
 
         let bannedUsers = [];
-
         username = socket.username;
-
-        if(bannedUsers = blackList.get(joiningRoomId)) {
-
+        if(bannedUsers = blackList.get(joiningRoomId)) { //checks to see if user is banned from room
             if(bannedUsers.indexOf(username) != -1) {
 
-                socket.emit('banOrder', {banUser: username, roomId: joiningRoomId});
+                socket.emit('banOrder', {banUser: username, roomId: joiningRoomId}); 
                 return;
-
 
             }
         }
 
-        if(privateRooms.get(joiningRoomId) != null) {
+        if(privateRooms.get(joiningRoomId) != null) { //if room is password protected, password is requested
 
             socket.emit('password_request', {roomId: joiningRoomId});
+            console.log("pwd_req");
             return;
 
         }
+
+        console.log("I am in the regular join area");
 
         let thisRoomUsers = roomUsers.get(joiningRoomId);
         thisRoomUsers.push(username);
 
         roomUsers.set(joiningRoomId, thisRoomUsers);
-        //console.log(roomUsers);
 
         socket.join(joiningRoomId);
 
-        socket.emit('joinHandshake', {});
+        socket.emit('joinHandshake', {roomId: joiningRoomId});
         socket.emit('roomMessage', {sender: "Server", message: "Joined " + allRooms.get(joiningRoomId) + "!", roomId: joiningRoomId});
         socket.to(joiningRoomId).emit('roomMessage', {sender: "Server", message: data.username + " joined the room!", roomId: joiningRoomId});
 
         updateRoomUsers(joiningRoomId);
-
-
 
     }); 
 
@@ -198,25 +145,25 @@ io.sockets.on("connection", function (socket) {
 
             let thisRoomUsers = roomUsers.get(roomId);
             thisRoomUsers.push(username);
+
+            console.log(thisRoomUsers);
+            console.log('pwd_check');
     
             roomUsers.set(roomId, thisRoomUsers);
-            //console.log(roomUsers);
     
             socket.join(roomId);
     
-            socket.emit('joinHandshake', {});
+            socket.emit('joinHandshake', {roomId: roomId});
             socket.emit('roomMessage', {sender: "Server", message: "Joined " + allRooms.get(roomId) + "!", roomId: roomId});
             socket.to(roomId).emit('roomMessage', {sender: "Server", message: data.username + " joined the room!", roomId: roomId});
     
             updateRoomUsers(roomId);
+            return;
             
         }
         else {
             socket.emit("pwd_false", {});
         }
-
-
-
     });
 
     socket.on("exit_room_request", function(data) {
@@ -229,7 +176,7 @@ io.sockets.on("connection", function (socket) {
 
         let nameIndex = thisRoomUsers.indexOf(username);
 
-        if(nameIndex != -1) {
+        if(nameIndex != -1) { //removes user from userList
             thisRoomUsers.splice(nameIndex, 1);
         }
 
@@ -238,13 +185,8 @@ io.sockets.on("connection", function (socket) {
         socket.to(roomId).emit('roomMessage', {sender: "Server", message: username + " left!", roomId: roomId});
 
         socket.leave(roomId);
-        // console.log(username + " left " + roomId);
         updateRooms();
         updateRoomUsers(roomId);
-
-        //remove username from array
-
-
 
     });
 
@@ -255,8 +197,6 @@ io.sockets.on("connection", function (socket) {
 
         socket.to(roomId).emit('kickOrder', {kickUser: kickUser, roomId: roomId});
         io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: kickUser + " was kicked from the room!", roomId: roomId});
-
-
 
     });
 
@@ -283,7 +223,6 @@ io.sockets.on("connection", function (socket) {
     socket.on('banUser', function(data) {
 
         let bannedUsers = []; 
-
         let banUser = data.banUser;
         let roomId = data.roomId;
 
@@ -301,28 +240,18 @@ io.sockets.on("connection", function (socket) {
         }
 
         let toSocket = allUsers.get(banUser);
-
-        // console.log(bannedUsers);
-
         socket.to(toSocket.id).emit('banOrder', {banUser: banUser, roomId: roomId});
         io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: banUser + " was banned from the room!", roomId: roomId});
 
-
-
     });
 
-
-
-
-    function updateRooms() {
+    function updateRooms() { //updates the room list
 
         for(let roomId of allRooms.keys()) {
     
             if(rooms.get(roomId) == null) {
                 allRooms.delete(roomId);
             }
-    
-    
         }
 
         roomList = [];
@@ -330,34 +259,18 @@ io.sockets.on("connection", function (socket) {
             roomList.push(roomName);
 
         }
-    
-        //console.log(roomList);
 
         io.emit('roomList', JSON.parse(JSON.stringify(roomList)));
-    
+
     }
 
     function updateRoomUsers(roomId) {
 
         userList = roomUsers.get(roomId);
-
+        console.log(userList);
         username = socket.username;
-
-        // nameIndex = userList.indexOf(username);
-        // userList.splice(nameIndex, 1);
-
-        //console.log(userList);
         io.to(roomId).emit('userList', JSON.parse(JSON.stringify(userList)));
-
-
     }
-
-
-
-
-
-
 });
-
 
 server.listen(port);

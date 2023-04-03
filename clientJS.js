@@ -9,12 +9,11 @@ let roomsCreated = [];
 
 Window.onload = onLoadFunction();
 
-function onLoadFunction() {
+function onLoadFunction() { //sets display
 
     document.getElementById("mainArea").style.display = 'none';
     document.getElementById("setUsername").style.display= 'block';
     document.getElementById("createRoom").style.display = 'block';
-
     document.getElementById("usernameButton").addEventListener("click", setUsername, false);
 
 }
@@ -29,7 +28,6 @@ function setUsername() {
     else {
         username = usernameEntry;
 
-
         document.getElementById("mainArea").style.display = 'flex';
         document.getElementById("setUsername").style.display= 'none';
         document.getElementById("chatBox").style.display = 'none';
@@ -38,16 +36,11 @@ function setUsername() {
 
         socketio.emit("logon", {username: username});
 
-
         setCreateListener();
-        //setJoinListeners();
-
-
     }
 }
 
-
-//Event listeners to join a room or create a room
+//Event listeners to create a room
 function setCreateListener() {
 
     document.getElementById("createRoomButton").addEventListener('click', createRoom, false);
@@ -55,10 +48,10 @@ function setCreateListener() {
 
 }
 
+//event listeners to join a room
 function setJoinListeners() {
 
     console.log("in setJoinListeners");
-
     let roomElements = document.getElementsByClassName('roomName');
 
     for(let i = 0; i < roomElements.length; i++) {
@@ -69,11 +62,7 @@ function setJoinListeners() {
             joinRoom(roomId);
 
         });
-
-
     }
-
-
 
 }
 
@@ -86,13 +75,12 @@ function createRoom() {
 
     socketio.emit("create_room_request", {createRoomName: createRoomName, createRoomPassword: createRoomPassword});
 
-    document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
-
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
     document.getElementById("currUsers").style.display = 'block';
     document.getElementById("createRoom").style.display = 'none';
 
+    document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
 
 
@@ -100,18 +88,15 @@ function createRoom() {
 
 function joinRoom(roomId) {
 
-   
     document.getElementById("roomMessages").innerHTML = "";
-    
-    currentRoomId = roomId;
-
     socketio.emit("join_room_request", {roomId: roomId, username: username});
 
 }
 
-socketio.on('joinHandshake', (data) => {
+socketio.on('joinHandshake', (data) => { //join confirmed by server, display changed
 
-    document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
+    currentRoomId = data.roomId;
+
 
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
@@ -119,6 +104,7 @@ socketio.on('joinHandshake', (data) => {
     document.getElementById("pwdCheck").style.display = 'none';
     document.getElementById("currUsers").style.display = 'block';
 
+    document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
 
 });
@@ -127,8 +113,6 @@ function showAvailRooms() {
 
     socketio.emit("exit_room_request", {roomId: currentRoomId, username: username});
 
-    //leave room on socket.io
-
     document.getElementById("chatBox").style.display = 'none';
     document.getElementById("availRooms").style.display='block';
     document.getElementById("currUsers").style.display = 'none';
@@ -136,13 +120,11 @@ function showAvailRooms() {
 
     currentRoomId = -1;
 
-
 }
 
 function userListListeners(callback) {
 
     let count = 0;
-
     let kickoutClass = document.getElementsByClassName("kickout");
 
     for(let i = 0; i < kickoutClass.length; i++) {
@@ -150,11 +132,8 @@ function userListListeners(callback) {
         kickoutClass[i].addEventListener('click', e=> {
     
             let roomId = currentRoomId;
-
             let elementId = (e.target.id).split('-');
-
             let kickUser = elementId[1];
-
             socketio.emit('kickUser', {kickUser: kickUser, roomId: roomId});
 
         });
@@ -162,7 +141,6 @@ function userListListeners(callback) {
         if(i == kickoutClass.length - 1) {
             count++;
         }
-
     }
     
     
@@ -173,13 +151,9 @@ function userListListeners(callback) {
         banClass[i].addEventListener('click', e=> {
     
             let roomId = currentRoomId;
-
             let elementId = (e.target.id).split('-');
-
             let banUser = elementId[1];
-
             socketio.emit('banUser', {banUser: banUser, roomId: roomId});
-
 
         });
     
@@ -196,18 +170,13 @@ function userListListeners(callback) {
         makeAdmin[i].addEventListener('click', e=> {
     
             let roomId = currentRoomId;
-
             let elementId = (e.target.id).split('-');
-
             let makeAdminUser = elementId[1];
-
             socketio.emit("changeAdmin", {roomId: roomId, username: makeAdminUser});
 
             index = roomsCreated.indexOf(roomId);
             roomsCreated.splice(index, 1);
-
             roomAdminElements();
-
         });
 
         if(i == makeAdmin.length - 1) {
@@ -217,17 +186,15 @@ function userListListeners(callback) {
     }
 
     if(count == 3) {
-        callback();
+        callback(); //calls roomAdminElements
     }
     
 
 }
 
-function roomAdminElements() {
+function roomAdminElements() { //sets display for kick, ban, makeadmin
 
     let roomElements = document.getElementsByClassName('roomElements');
-
-
 
     if(roomsCreated.indexOf(currentRoomId) == -1) {
 
@@ -243,29 +210,20 @@ function roomAdminElements() {
 
 
     }
-
-
 }
 
 
-
-
-
-socketio.on('roomMessage', (data) => {
-
-    // alert(data.message + " " + data.sender);
-
+socketio.on('roomMessage', (data) => { //sends message to room
 
     if(data.sender == username) {
         return;
     }
 
     document.getElementById('roomMessages').innerHTML += '<div class="message">' + data.sender + ": " + data.message + '</div>';
-
     currentRoomId = data.roomId;
 });
 
-function sendRoomMessage() {
+function sendRoomMessage() { //sends message to room
 
     let sendTo = document.getElementById('usersDropDown').value;
     let messageContent = document.getElementById("sendMessageText").value; 
@@ -274,18 +232,15 @@ function sendRoomMessage() {
 
         socketio.emit("clientRoomMessage", {roomId: currentRoomId, username: username, message: messageContent});
 
-
     }
     else {
         socketio.emit("privateMessage", {username: sendTo, message: messageContent});
         document.getElementById('roomMessages').innerHTML += '<div class="userMessage">[Private to ' + sendTo + ']: ' + messageContent + '</div>'
 
     }
-
-
 }
 
-socketio.on('messageAccepted', (data) => {
+socketio.on('messageAccepted', (data) => { //message sent
 
     document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
 
@@ -297,8 +252,7 @@ socketio.on('privateMessageRecieve', (data) => {
 
 });
 
-socketio.on('roomList', (data) => {
-
+socketio.on('roomList', (data) => { //gets active roomList
 
     document.getElementById("roomNames").innerHTML = "";
 
@@ -311,24 +265,16 @@ socketio.on('roomList', (data) => {
 
         for(let i = 0; i < data.length; i++) {
 
-
             roomName = data[i];
             document.getElementById("roomNames").innerHTML += "<div class='roomName createRoomButton' id=" + roomName + ">" + roomName + "</div>";    
     
         }
 
         setJoinListeners();
-
-
-
-
     }
-
-    //document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
-
 });
 
-socketio.on('userList', (data) => {
+socketio.on('userList', (data) => { //displays all room users
 
     roomUsersDiv = document.getElementById("roomUsers");
 
@@ -384,14 +330,9 @@ socketio.on('userList', (data) => {
     
         document.getElementById('usersDropDown').innerHTML += "<option value=" + thisUser + ">" + thisUser + "</option>"
 
-
-
     }
 
     userListListeners(roomAdminElements);
-    //roomAdminElements();
-    
-
 });
 
 socketio.on('roomAdmin', data => {
@@ -465,10 +406,14 @@ socketio.on('password_request', (data) => {
         pwd = document.getElementById('pwdCheckText').value;
 
         socketio.emit('pwd_check', {pwd_attempt: pwd, username: username, roomId: roomId});
+        return;
+        
 
 
 
     });
+
+    return;
 
 });
 
