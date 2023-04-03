@@ -4,6 +4,7 @@ const port = 3456;
 let roomIdGen = 1;
 
 let publicRooms = new Map();
+let roomList = [];
 
 const express = require('express'),
      http = require('http');
@@ -20,8 +21,13 @@ const socketio = require("socket.io")(http, {
 
 // Attach our Socket.IO server to our HTTP server to listen
 const io = socketio.listen(server);
+
+let rooms = io.of("/").adapter.rooms;
+
 io.sockets.on("connection", function (socket) {
     // This callback runs when a new Socket.IO connection is established.
+
+    console.log(socket.id);
 
     socket.on('message_to_server', function (data) {
         // This callback runs when the server receives a new message from the client.
@@ -39,6 +45,8 @@ io.sockets.on("connection", function (socket) {
 
             publicRooms.set(newRoomId, data.createRoomName);
 
+            socket.leaveAll();
+
             socket.join(newRoomId);
 
 
@@ -47,7 +55,16 @@ io.sockets.on("connection", function (socket) {
             
 
 
-            io.sockets.to(newRoomId).emit('roomMessage', {roomId: newRoomId, message: "Welcome!"});
+            io.sockets.to(newRoomId).emit('roomMessage', {sender: "Server", message: "Joined " + publicRooms.get(newRoomId) + "!", roomId: newRoomId});
+
+            console.log(socket.id);
+
+
+            updateRooms();
+
+
+
+
 
         }        
 
@@ -56,11 +73,49 @@ io.sockets.on("connection", function (socket) {
 
     });
 
+    socket.on('clientRoomMessage', function(data) {
+
+        let roomId = data.roomId + "";
+        let sender = data.username;
+        let message = data.message;
+
+        socket.to(roomId).emit('roomMessage', {sender: sender, message: message});
+        socket.emit("messageAccepted", {message: message});
+    
+    
+    });
+
+
+
+    function updateRooms() {
+
+        for(let roomId of publicRooms.keys()) {
+    
+            if(rooms.get(roomId) == null) {
+                publicRooms.delete(roomId);
+            }
+    
+    
+        }
+
+        for(let roomName of publicRooms.values()) {
+            roomList = [];
+            roomList.push(roomName);
+
+        }
+    
+        console.log(roomList);
+
+        io.emit('roomList', JSON.stringify(roomList));
+    
+    }
+
 
 
 
 
 
 });
+
 
 server.listen(port);
