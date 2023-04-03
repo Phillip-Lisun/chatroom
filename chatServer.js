@@ -66,43 +66,51 @@ io.sockets.on("connection", function (socket) {
 
     socket.on('create_room_request', function(data) {
 
-        if(data.createRoomPassword == "") {
+    
 
-            let newRoomId = roomIdGen + "";
-            roomIdGen++;
-
-
-            allRooms.set(newRoomId, data.createRoomName);
-
-            //socket.leaveAll();
-
-            socket.join(newRoomId);
+        let newRoomId = roomIdGen + "";
+        roomIdGen++;
 
 
-            // console.log("Room Joined: " + newRoomId);
-            // console.log(allRooms);
-            
-            // console.log("newRoomId: " + newRoomId);
+        allRooms.set(newRoomId, data.createRoomName);
 
-            username = socket.username;
+        //socket.leaveAll();
 
-            let thisRoomUsers = [];
-            thisRoomUsers.push(username);
-
-            roomUsers.set(newRoomId, thisRoomUsers);
-            //console.log(roomUsers);
-            
+        socket.join(newRoomId);
 
 
-            socket.emit('roomMessage', {sender: "Server", message: "Created " + allRooms.get(newRoomId) + "!", roomId: newRoomId});
-            socket.emit('roomAdmin', {roomId: newRoomId});
+        // console.log("Room Joined: " + newRoomId);
+        // console.log(allRooms);
+        
+        // console.log("newRoomId: " + newRoomId);
 
-            updateRoomUsers(newRoomId);
+        username = socket.username;
+
+        let thisRoomUsers = [];
+        thisRoomUsers.push(username);
+
+        roomUsers.set(newRoomId, thisRoomUsers);
+        //console.log(roomUsers);
+        
 
 
-            //console.log(socket.id);
+        socket.emit('roomMessage', {sender: "Server", message: "Created " + allRooms.get(newRoomId) + "!", roomId: newRoomId});
+        socket.emit('roomAdmin', {roomId: newRoomId});
 
-        }        
+        updateRoomUsers(newRoomId);
+
+
+        //console.log(socket.id);
+
+
+        
+        if(data.createRoomPassword != "") {
+
+            let pwd = data.createRoomPassword;
+
+            privateRooms.set(newRoomId, pwd);
+
+        }
 
 
         //console.log(data.createRoomName + " " + data.createRoomPassword);
@@ -146,13 +154,18 @@ io.sockets.on("connection", function (socket) {
 
             if(bannedUsers.indexOf(username) != -1) {
 
-                let toSocket = allUsers.get(username);
-
                 socket.emit('banOrder', {banUser: username, roomId: joiningRoomId});
                 return;
 
 
             }
+        }
+
+        if(privateRooms.get(joiningRoomId) != null) {
+
+            socket.emit('password_request', {roomId: joiningRoomId});
+            return;
+
         }
 
         let thisRoomUsers = roomUsers.get(joiningRoomId);
@@ -162,6 +175,8 @@ io.sockets.on("connection", function (socket) {
         //console.log(roomUsers);
 
         socket.join(joiningRoomId);
+
+        socket.emit('joinHandshake', {});
         socket.emit('roomMessage', {sender: "Server", message: "Joined " + allRooms.get(joiningRoomId) + "!", roomId: joiningRoomId});
         socket.to(joiningRoomId).emit('roomMessage', {sender: "Server", message: data.username + " joined the room!", roomId: joiningRoomId});
 
@@ -170,6 +185,39 @@ io.sockets.on("connection", function (socket) {
 
 
     }); 
+
+    socket.on('pwd_check', function(data) {
+
+        let pwd_attempt = data.pwd_attempt;
+        let username = data.username;
+        let roomId = data.roomId;
+
+        let pwd = privateRooms.get(roomId);
+
+        if(pwd === pwd_attempt) {
+
+            let thisRoomUsers = roomUsers.get(roomId);
+            thisRoomUsers.push(username);
+    
+            roomUsers.set(roomId, thisRoomUsers);
+            //console.log(roomUsers);
+    
+            socket.join(roomId);
+    
+            socket.emit('joinHandshake', {});
+            socket.emit('roomMessage', {sender: "Server", message: "Joined " + allRooms.get(roomId) + "!", roomId: roomId});
+            socket.to(roomId).emit('roomMessage', {sender: "Server", message: data.username + " joined the room!", roomId: roomId});
+    
+            updateRoomUsers(roomId);
+            
+        }
+        else {
+            socket.emit("pwd_false", {});
+        }
+
+
+
+    });
 
     socket.on("exit_room_request", function(data) {
 

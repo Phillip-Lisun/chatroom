@@ -107,15 +107,21 @@ function joinRoom(roomId) {
 
     socketio.emit("join_room_request", {roomId: roomId, username: username});
 
+}
+
+socketio.on('joinHandshake', (data) => {
+
     document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
 
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
     document.getElementById("createRoom").style.display = 'none';
+    document.getElementById("pwdCheck").style.display = 'none';
     document.getElementById("currUsers").style.display = 'block';
 
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
-}
+
+});
 
 function showAvailRooms() {
 
@@ -441,5 +447,38 @@ socketio.on('adminSet', data => {
         alert("You are now the Admin of this room!");
 
     }
+
+});
+
+socketio.on('password_request', (data) => {
+
+    let roomId = data.roomId;
+    let pwd = '';
+
+    document.getElementById("createRoom").style.display = 'none';
+    document.getElementById("pwdCheck").style.display = 'block';
+
+    alert('Enter Password');
+
+    document.getElementById('pwdCheckSubmit').addEventListener('click', e=> {
+
+        pwd = document.getElementById('pwdCheckText').value;
+
+        socketio.emit('pwd_check', {pwd_attempt: pwd, username: username, roomId: roomId});
+
+
+
+    });
+
+});
+
+socketio.on('pwd_false', (data) => {
+
+    document.getElementById("chatBox").style.display = 'none';
+    document.getElementById("availRooms").style.display='block';
+    document.getElementById("currUsers").style.display = 'none';
+    document.getElementById("createRoom").style.display = 'block';
+
+    alert("incorrect password!");
 
 });
