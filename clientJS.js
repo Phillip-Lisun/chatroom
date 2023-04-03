@@ -11,6 +11,8 @@ function onLoadFunction() {
 
     document.getElementById("mainArea").style.display = 'none';
     document.getElementById("setUsername").style.display= 'block';
+    document.getElementById("createRoom").style.display = 'block';
+
 
     document.getElementById("usernameButton").addEventListener("click", setUsername, false);
 
@@ -86,6 +88,7 @@ function createRoom() {
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
     document.getElementById("currUsers").style.display = 'block';
+    document.getElementById("createRoom").style.display = 'none';
 
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
 
@@ -102,6 +105,7 @@ function joinRoom(roomId) {
 
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
+    document.getElementById("createRoom").style.display = 'none';
     document.getElementById("currUsers").style.display = 'block';
 
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
@@ -117,6 +121,8 @@ function showAvailRooms() {
     document.getElementById("chatBox").style.display = 'none';
     document.getElementById("availRooms").style.display='block';
     document.getElementById("currUsers").style.display = 'none';
+    document.getElementById("createRoom").style.display = 'block';
+
 
 
 
