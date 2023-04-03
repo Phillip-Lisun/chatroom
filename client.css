@@ -183,6 +183,8 @@ svg:hover{
     border: #2C3639 solid 1px;
     border-radius: 10px;
     width: auto;
+
+    display: none;
 }
 
 .roomElements:hover{

@@ -3,8 +3,18 @@ const port = 3456;
 
 let roomIdGen = 1;
 
-let publicRooms = new Map();
+let allRooms = new Map();
+
+let roomUsers = new Map();
+
+let blackList = new Map();
+
+let privateRooms = new Map();
+
+
+
 let roomList = [];
+let userList = [];
 
 const express = require('express'),
      http = require('http');
@@ -31,6 +41,15 @@ io.sockets.on("connection", function (socket) {
 
     updateRooms();
 
+    socket.on('logon', function(data) {
+
+        username = data.username;
+
+        socket.username = username;
+        //console.log(socket.username);
+
+    });
+
 
     socket.on('message_to_server', function (data) {
         // This callback runs when the server receives a new message from the client.
@@ -47,21 +66,33 @@ io.sockets.on("connection", function (socket) {
             roomIdGen++;
 
 
-            publicRooms.set(newRoomId, data.createRoomName);
+            allRooms.set(newRoomId, data.createRoomName);
 
-            socket.leaveAll();
+            //socket.leaveAll();
 
             socket.join(newRoomId);
 
 
-            console.log("Room Joined: " + newRoomId);
-            console.log(publicRooms);
+            // console.log("Room Joined: " + newRoomId);
+            // console.log(allRooms);
             
-            console.log("newRoomId: " + newRoomId);
+            // console.log("newRoomId: " + newRoomId);
+
+            username = socket.username;
+
+            let thisRoomUsers = [];
+            thisRoomUsers.push(username);
+
+            roomUsers.set(newRoomId, thisRoomUsers);
+            //console.log(roomUsers);
             
 
 
-            socket.emit('roomMessage', {sender: "Server", message: "Joined " + publicRooms.get(newRoomId) + "!", roomId: newRoomId});
+            socket.emit('roomMessage', {sender: "Server", message: "Created " + allRooms.get(newRoomId) + "!", roomId: newRoomId});
+            socket.emit('roomAdmin', {roomId: newRoomId});
+
+            updateRoomUsers(newRoomId);
+
 
             //console.log(socket.id);
 
@@ -73,6 +104,7 @@ io.sockets.on("connection", function (socket) {
         updateRooms();
 
 
+
     });
 
     socket.on('clientRoomMessage', function(data) {
@@ -82,9 +114,9 @@ io.sockets.on("connection", function (socket) {
         let message = data.message;
 
         io.sockets.in(roomId).emit('roomMessage', {sender: sender, message: message, roomId: roomId});
-        console.log(message);
-        console.log(sender);
-        console.log(roomId);
+        // console.log(message);
+        // console.log(sender);
+        // console.log(roomId);
         socket.emit("messageAccepted", {message: message});
     
     
@@ -94,42 +126,128 @@ io.sockets.on("connection", function (socket) {
 
         let joiningRoomId;
 
-        for(let [id, roomName] of publicRooms.entries()) {
+        for(let [id, roomName] of allRooms.entries()) {
             if(roomName == data.roomId) {
                 joiningRoomId = id;
             }
         }
 
+        username = socket.username;
+        let thisRoomUsers = roomUsers.get(joiningRoomId);
+        thisRoomUsers.push(username);
+
+        roomUsers.set(joiningRoomId, thisRoomUsers);
+        //console.log(roomUsers);
+
         socket.join(joiningRoomId);
-        socket.emit('roomMessage', {sender: "Server", message: "Joined " + publicRooms.get(joiningRoomId) + "!", roomId: joiningRoomId});
+        socket.emit('roomMessage', {sender: "Server", message: "Joined " + allRooms.get(joiningRoomId) + "!", roomId: joiningRoomId});
         socket.to(joiningRoomId).emit('roomMessage', {sender: "Server", message: data.username + " joined the room!", roomId: joiningRoomId});
+
+        updateRoomUsers(joiningRoomId);
+
 
 
     }); 
+
+    socket.on("exit_room_request", function(data) {
+
+        username = data.username;
+        roomId = data.roomId;
+
+        username = socket.username;
+        let thisRoomUsers = roomUsers.get(roomId);
+
+        let nameIndex = thisRoomUsers.indexOf(username);
+
+        if(nameIndex != -1) {
+            thisRoomUsers.splice(nameIndex, 1);
+        }
+
+        roomUsers.set(roomId, thisRoomUsers);
+
+        socket.to(roomId).emit('roomMessage', {sender: "Server", message: username + " left!", roomId: roomId});
+
+        socket.leave(roomId);
+        // console.log(username + " left " + roomId);
+        updateRooms();
+        updateRoomUsers(roomId);
+
+        //remove username from array
+
+
+
+    });
+
+    socket.on('kickUser', function(data) {
+
+        let kickUser = data.kickUser;
+        let roomId = data.roomId;
+
+        socket.to(roomId).emit('kickOrder', {kickUser: kickUser, roomId: roomId});
+        io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: kickUser + " was kicked from the room!", roomId: roomId});
+
+
+
+    });
+
+    // socket.on('kicked', function(data){
+
+    //     let roomId = data.roomId;
+
+    //     socket.leave(roomId);
+
+    // });
+
+    socket.on('changeAdmin', function(data) {
+
+        let roomId = data.roomId;
+        let newAdmin = data.username;
+
+        socket.to(roomId).emit('adminSet', {username: newAdmin, roomId: roomId});
+        io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: newAdmin + " is now the Admin of this room!", roomId: roomId});
+
+ 
+
+    });
 
 
 
     function updateRooms() {
 
-        for(let roomId of publicRooms.keys()) {
+        for(let roomId of allRooms.keys()) {
     
             if(rooms.get(roomId) == null) {
-                publicRooms.delete(roomId);
+                allRooms.delete(roomId);
             }
     
     
         }
 
         roomList = [];
-        for(let roomName of publicRooms.values()) {
+        for(let roomName of allRooms.values()) {
             roomList.push(roomName);
 
         }
     
-        console.log(roomList);
+        //console.log(roomList);
 
         io.emit('roomList', JSON.parse(JSON.stringify(roomList)));
     
+    }
+
+    function updateRoomUsers(roomId) {
+
+        userList = roomUsers.get(roomId);
+
+        username = socket.username;
+
+        // nameIndex = userList.indexOf(username);
+        // userList.splice(nameIndex, 1);
+
+        //console.log(userList);
+        io.to(roomId).emit('userList', JSON.parse(JSON.stringify(userList)));
+
+
     }
 
 

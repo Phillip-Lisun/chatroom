@@ -4,6 +4,8 @@ const socketio = io.connect();
 let username;
 let currentRoomId;
 
+let roomsCreated = [];
+
 
 Window.onload = onLoadFunction();
 
@@ -12,7 +14,6 @@ function onLoadFunction() {
     document.getElementById("mainArea").style.display = 'none';
     document.getElementById("setUsername").style.display= 'block';
     document.getElementById("createRoom").style.display = 'block';
-
 
     document.getElementById("usernameButton").addEventListener("click", setUsername, false);
 
@@ -34,6 +35,8 @@ function setUsername() {
         document.getElementById("chatBox").style.display = 'none';
         document.getElementById("availRooms").style.display='block';
         document.getElementById("currUsers").style.display = 'none';
+
+        socketio.emit("logon", {username: username});
 
 
         setCreateListener();
@@ -97,6 +100,10 @@ function createRoom() {
 
 function joinRoom(roomId) {
 
+   
+    document.getElementById("roomMessages").innerHTML = "";
+    
+
     socketio.emit("join_room_request", {roomId: roomId, username: username});
 
     currentRoomId = roomId;
@@ -116,6 +123,9 @@ function joinRoom(roomId) {
 }
 
 function showAvailRooms() {
+
+    socketio.emit("exit_room_request", {roomId: currentRoomId, username: username});
+
     //leave room on socket.io
 
     document.getElementById("chatBox").style.display = 'none';
@@ -123,55 +133,137 @@ function showAvailRooms() {
     document.getElementById("currUsers").style.display = 'none';
     document.getElementById("createRoom").style.display = 'block';
 
-
-}
-
-
-let kickoutClass = document.getElementsByClassName("kickout");
-
-for(let i = 0; i < kickoutClass.length; i++) {
-
-    kickoutClass[i].addEventListener('click', e=> {
-
-        let roomId = e.target.id;
-        // kickout
-        alert("kickout");
-
-        // socket.on('disconnect', function(roomId) {
-
-        //     // delete clients[socket.id];
-        //   });
-    });
+    currentRoomId = -1;
 
 
 }
 
+function userListListeners(callback) {
 
-let banClass = document.getElementsByClassName("ban");
+    let count = 0;
 
-for(let i = 0; i < banClass.length; i++) {
+    let kickoutClass = document.getElementsByClassName("kickout");
 
-    banClass[i].addEventListener('click', e=> {
+    for(let i = 0; i < kickoutClass.length; i++) {
+    
+        kickoutClass[i].addEventListener('click', e=> {
+    
+            let roomId = currentRoomId;
 
-        let roomId = e.target.id;
-        // ban
-        alert("BAN");
-    });
+            let elementId = (e.target.id).split('-');
+
+            let kickUser = elementId[1];
+
+            socketio.emit('kickUser', {kickUser: kickUser, roomId: roomId});
+
+
+
+            // kickout
+            alert("kickout " + kickUser);
+    
+            // socket.on('disconnect', function(roomId) {
+    
+            //     // delete clients[socket.id];
+            //   });
+        });
+    
+        if(i == kickoutClass.length - 1) {
+            count++;
+        }
+
+    }
+    
+    
+    let banClass = document.getElementsByClassName("ban");
+    
+    for(let i = 0; i < banClass.length; i++) {
+    
+        banClass[i].addEventListener('click', e=> {
+    
+            let roomId = currentRoomId;
+
+            let elementId = (e.target.id).split('-');
+
+            let banUser = elementId[1];
+
+
+
+            // ban
+            alert("ban " + banUser);
+
+        });
+    
+        if(i == banClass.length - 1) {
+            count++;
+        }
+
+    }
+    
+    let makeAdmin = document.getElementsByClassName("makeAdmin");
+    
+    for(let i = 0; i < makeAdmin.length; i++) {
+    
+        makeAdmin[i].addEventListener('click', e=> {
+    
+            let roomId = currentRoomId;
+
+            let elementId = (e.target.id).split('-');
+
+            let makeAdminUser = elementId[1];
+
+            socketio.emit("changeAdmin", {roomId: roomId, username: makeAdminUser});
+
+            index = roomsCreated.indexOf(roomId);
+            roomsCreated.splice(index, 1);
+
+            roomAdminElements();
+
+
+
+
+            // kickout
+            alert("makeAdmin " + makeAdminUser);
+            // makeAdmin
+        });
+
+        if(i == makeAdmin.length - 1) {
+            count++;
+        }
+    
+    }
+
+    if(count == 3) {
+        callback();
+    }
+    
 
 }
 
-let makeAdmin = document.getElementsByClassName("makeAdmin");
+function roomAdminElements() {
 
-for(let i = 0; i < makeAdmin.length; i++) {
+    let roomElements = document.getElementsByClassName('roomElements');
 
-    makeAdmin[i].addEventListener('click', e=> {
 
-        let roomId = e.target.id;
-        // makeAdmin
-        alert("admin");
-    });
+
+    if(roomsCreated.indexOf(currentRoomId) == -1) {
+
+        for(let i = 0; i < roomElements.length; i++) {
+            roomElements[i].style.display = 'none';
+        }
+
+    } 
+    else {
+        for(let i = 0; i < roomElements.length; i++) {
+            roomElements[i].style.display = 'block';
+        }
+
+
+    }
+
 
 }
+
+
 
 
 
@@ -232,5 +324,100 @@ socketio.on('roomList', (data) => {
     }
 
     //document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
+
+});
+
+socketio.on('userList', (data) => {
+
+    roomUsersDiv = document.getElementById("roomUsers");
+
+    roomUsersDiv.innerHTML = "";
+
+    userList = data;
+
+    for(let i = 0; i < userList.length; i++) {
+
+        thisUser = userList[i];
+
+        if(thisUser == username) {
+            continue;
+        }
+
+        let userElement = document.createElement('div');
+        userElement.setAttribute('class', 'userElement');
+        userElement.setAttribute('id', 'userElement-' + thisUser);
+
+        roomUsersDiv.appendChild(userElement);
+
+        let usernameElement = document.createElement('div');
+        usernameElement.setAttribute('class', 'roomUsername');
+        usernameElement.setAttribute('id', 'roomUsername-' + thisUser);
+        usernameElement.innerText = thisUser;
+
+        document.getElementById('userElement-' + thisUser).appendChild(usernameElement);
+
+        //kick, ban, makeAdmin buttons
+
+        let kickElement = document.createElement('div');
+        kickElement.setAttribute('class', 'roomElements kickout');
+        kickElement.setAttribute('id', 'kick-' + thisUser);
+        kickElement.innerText = "Kick";
+
+        document.getElementById('userElement-' + thisUser).appendChild(kickElement);
+
+        let banElement = document.createElement('div');
+        banElement.setAttribute('class', 'roomElements ban');
+        banElement.setAttribute('id', 'ban-' + thisUser);
+        banElement.innerText = "Ban";
+
+        document.getElementById('userElement-' + thisUser).appendChild(banElement);
+
+        let adminElement = document.createElement('div');
+        adminElement.setAttribute('class', 'roomElements makeAdmin');
+        adminElement.setAttribute('id', 'makeAdmin-' + thisUser);
+        adminElement.innerText = "Make Admin";
+
+        document.getElementById('userElement-' + thisUser).appendChild(adminElement);
+
+
+    }
+
+    userListListeners(roomAdminElements);
+    //roomAdminElements();
+    
+
+});
+
+socketio.on('roomAdmin', data => {
+
+    let roomId = data.roomId;
+    roomsCreated.push(roomId);
+
+});
+
+socketio.on('kickOrder', data => {
+
+    let roomId = data.roomId;
+    let kickUser = data.kickUser;
+
+    if(roomId == currentRoomId && kickUser == username) {
+        alert('You have been kicked!');
+        showAvailRooms();
+
+    }
+
+});
+
+socketio.on('adminSet', data => {
+
+    let roomId = data.roomId;
+    let newAdmin = data.username;
+
+    if(newAdmin == username) {
+        roomsCreated.push(roomId);
+        roomAdminElements();
+        alert("You are now the Admin of this room!");
+
+    }
 
 });
