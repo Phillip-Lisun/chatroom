@@ -29,8 +29,13 @@ function setUsername() {
 
         document.getElementById("mainArea").style.display = 'flex';
         document.getElementById("setUsername").style.display= 'none';
+        document.getElementById("chatBox").style.display = 'none';
+        document.getElementById("availRooms").style.display='block';
+        document.getElementById("currUsers").style.display = 'none';
 
-        setEventListeners();
+
+        setCreateListener();
+        //setJoinListeners();
 
 
     }
@@ -38,11 +43,31 @@ function setUsername() {
 
 
 //Event listeners to join a room or create a room
-function setEventListeners() {
+function setCreateListener() {
 
     document.getElementById("createRoomButton").addEventListener('click', createRoom, false);
 
-    //add join room eventListeners
+
+}
+
+function setJoinListeners() {
+
+    console.log("in setJoinListeners");
+
+    let roomElements = document.getElementsByClassName('roomName');
+
+    for(let i = 0; i < roomElements.length; i++) {
+
+        roomElements[i].addEventListener('click', e=> {
+
+            let roomId = e.target.id;
+            joinRoom(roomId);
+
+        });
+
+
+    }
+
 
 
 }
@@ -58,10 +83,50 @@ function createRoom() {
 
     document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
 
+    document.getElementById("chatBox").style.display = 'block';
+    document.getElementById("availRooms").style.display='none';
+    document.getElementById("currUsers").style.display = 'block';
+
+    document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
+
+
+}
+
+function joinRoom(roomId) {
+
+    socketio.emit("join_room_request", {roomId: roomId, username: username});
+
+    currentRoomId = roomId;
+
+    document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
+
+    document.getElementById("chatBox").style.display = 'block';
+    document.getElementById("availRooms").style.display='none';
+    document.getElementById("currUsers").style.display = 'block';
+
+    document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
+
+
+
+
+}
+
+function showAvailRooms() {
+    //leave room on socket.io
+
+    document.getElementById("chatBox").style.display = 'none';
+    document.getElementById("availRooms").style.display='block';
+    document.getElementById("currUsers").style.display = 'none';
+
+
 
 }
 
 socketio.on('roomMessage', (data) => {
+
+    // alert(data.message + " " + data.sender);
+
+
     if(data.sender == username) {
         return;
     }
@@ -77,6 +142,7 @@ function sendRoomMessage() {
 
     socketio.emit("clientRoomMessage", {roomId: currentRoomId, username: username, message: messageContent});
 
+
 }
 
 socketio.on('messageAccepted', (data) => {
@@ -87,8 +153,31 @@ socketio.on('messageAccepted', (data) => {
 
 socketio.on('roomList', (data) => {
 
-    alert(data);
 
-    document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
+    document.getElementById("roomNames").innerHTML = "";
+
+    if(data.length == 0) {
+
+        document.getElementById("roomNames").innerHTML += "<div>No Rooms Yet! Create One!</div>";
+
+    }
+    else {
+
+        for(let i = 0; i < data.length; i++) {
+
+
+            roomName = data[i];
+            document.getElementById("roomNames").innerHTML += "<div class='roomName createRoomButton' id=" + roomName + ">" + roomName + "</div>";    
+    
+        }
+
+        setJoinListeners();
+
+
+
+
+    }
+
+    //document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
 
 });

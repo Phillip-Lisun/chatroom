@@ -11,7 +11,9 @@
    <div id="setUsername" class="setUsername">
 
       <div id="usernameLabel">Set Username: </div>
-      <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea>
+
+      <input type="text" id="username" name="username" placeholder="Username">
+      <!-- <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea> -->
       <div class="smallButton" id="usernameButton">Enter</div>
 
    </div>
@@ -24,7 +26,7 @@
       <div id="chatBox" class="chatBox">
          <?xml version="1.0" encoding="utf-8"?>
          <!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         <svg version="1.1" id="backButton" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
             <path d="M100,56v5c0,5.3-2.1,10.4-5.9,14.1C90.4,78.9,85.3,81,80,81H50V71h30c2.7,0,5.2-1.1,7.1-2.9c1.9-1.9,2.9-4.4,2.9-7.1v-5
 	c0-2.7-1.1-5.2-2.9-7.1C85.2,47.1,82.7,46,80,46H17.1l10,10L20,63.1L1.5,44.6C0.5,43.6,0,42.4,0,41s0.5-2.6,1.5-3.5L20,19l7.1,7.1
@@ -51,21 +53,21 @@
 
          </div>
 
-         <div class="currRooms">
+
+      </div>
+
+
+      <div id="availRooms" class="chatBox">
+         <div class="currRooms" id="currRooms">
             <div class="boxTitle" id="availableRoomsTitle">
                Available Rooms:
             </div>
             <hr>
-            THERE ARE CURRENTLY NO ROOMS! MAKE A ROOM!!
-            <div class="roomNames">
-               <div>room 1</div>
-               <div>room 2</div>
-               <div>room 3</div>
-               <div>room 4</div>
-            </div>
-            
+            <div class="roomNames" id="roomNames">
+   
          </div>
-
+         
+      </div>
       </div>
 
       <div class="sideBar">
@@ -90,16 +92,16 @@
 
          <hr>
 
-         <div class="currUsers">
+         <div class="currUsers" id="currUsers">
             <div class="boxTitle">Current Room Users: </div>
             <div id="roomUsers" class="roomUsers">
-               <div class="roomUser">Alice</div>
+               <!-- <div class="roomUser">Alice</div>
                <div class="roomUser">Phillip</div>
                <div class="roomUser">Alice</div>
                <div class="roomUser">Phillip</div>
                <div class="roomUser">Alice</div>
                <div class="roomUser">Phillip</div>
-               <div class="roomUser">Alice</div>
+               <div class="roomUser">Alice</div> -->
             </div>
          </div>
 
