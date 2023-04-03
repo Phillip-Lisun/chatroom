@@ -138,7 +138,23 @@ io.sockets.on("connection", function (socket) {
             }
         }
 
+        let bannedUsers = [];
+
         username = socket.username;
+
+        if(bannedUsers = blackList.get(joiningRoomId)) {
+
+            if(bannedUsers.indexOf(username) != -1) {
+
+                let toSocket = allUsers.get(username);
+
+                socket.emit('banOrder', {banUser: username, roomId: joiningRoomId});
+                return;
+
+
+            }
+        }
+
         let thisRoomUsers = roomUsers.get(joiningRoomId);
         thisRoomUsers.push(username);
 
@@ -196,14 +212,6 @@ io.sockets.on("connection", function (socket) {
 
     });
 
-    // socket.on('kicked', function(data){
-
-    //     let roomId = data.roomId;
-
-    //     socket.leave(roomId);
-
-    // });
-
     socket.on('changeAdmin', function(data) {
 
         let roomId = data.roomId;
@@ -223,6 +231,38 @@ io.sockets.on("connection", function (socket) {
         socket.to(toSocket.id).emit('privateMessageRecieve', {sender: socket.username, message: messageContent});
 
     });
+
+    socket.on('banUser', function(data) {
+
+        let bannedUsers = []; 
+
+        let banUser = data.banUser;
+        let roomId = data.roomId;
+
+        if(blackList.get(roomId) == null) {
+
+            bannedUsers.push(banUser);
+            blackList.set(roomId, bannedUsers);
+
+        }
+        else {
+            bannedUsers = blackList.get(roomId);
+            bannedUsers.push(banUser);
+            blackList.set(roomId, bannedUsers);
+
+        }
+
+        let toSocket = allUsers.get(banUser);
+
+        // console.log(bannedUsers);
+
+        socket.to(toSocket.id).emit('banOrder', {banUser: banUser, roomId: roomId});
+        io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: banUser + " was banned from the room!", roomId: roomId});
+
+
+
+    });
+
 
 
 

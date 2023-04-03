@@ -103,10 +103,9 @@ function joinRoom(roomId) {
    
     document.getElementById("roomMessages").innerHTML = "";
     
+    currentRoomId = roomId;
 
     socketio.emit("join_room_request", {roomId: roomId, username: username});
-
-    currentRoomId = roomId;
 
     document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
 
@@ -116,10 +115,6 @@ function joinRoom(roomId) {
     document.getElementById("currUsers").style.display = 'block';
 
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
-
-
-
-
 }
 
 function showAvailRooms() {
@@ -156,15 +151,6 @@ function userListListeners(callback) {
 
             socketio.emit('kickUser', {kickUser: kickUser, roomId: roomId});
 
-
-
-            // kickout
-            alert("kickout " + kickUser);
-    
-            // socket.on('disconnect', function(roomId) {
-    
-            //     // delete clients[socket.id];
-            //   });
         });
     
         if(i == kickoutClass.length - 1) {
@@ -186,10 +172,8 @@ function userListListeners(callback) {
 
             let banUser = elementId[1];
 
+            socketio.emit('banUser', {banUser: banUser, roomId: roomId});
 
-
-            // ban
-            alert("ban " + banUser);
 
         });
     
@@ -218,12 +202,6 @@ function userListListeners(callback) {
 
             roomAdminElements();
 
-
-
-
-            // kickout
-            alert("makeAdmin " + makeAdminUser);
-            // makeAdmin
         });
 
         if(i == makeAdmin.length - 1) {
@@ -427,6 +405,28 @@ socketio.on('kickOrder', data => {
         showAvailRooms();
 
     }
+
+});
+
+socketio.on('banOrder', data => {
+
+    let roomId = data.roomId;
+    let banUser = data.banUser;
+
+    if(roomId == currentRoomId && banUser == username) {
+        alert('You have been banned!');
+        showAvailRooms();
+    }
+    else if(banUser == username) {
+        alert('You have been banned!');
+
+        document.getElementById("chatBox").style.display = 'none';
+        document.getElementById("availRooms").style.display='block';
+        document.getElementById("currUsers").style.display = 'none';
+        document.getElementById("createRoom").style.display = 'block';
+
+    }
+
 
 });
 
