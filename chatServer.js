@@ -3,6 +3,8 @@ const port = 3456;
 
 let roomIdGen = 1;
 
+let allUsers = new Map();
+
 let allRooms = new Map();
 
 let roomUsers = new Map();
@@ -46,6 +48,10 @@ io.sockets.on("connection", function (socket) {
         username = data.username;
 
         socket.username = username;
+
+        allUsers.set(username, socket);
+        //console.log(allUsers);
+
         //console.log(socket.username);
 
     });
@@ -204,9 +210,17 @@ io.sockets.on("connection", function (socket) {
         let newAdmin = data.username;
 
         socket.to(roomId).emit('adminSet', {username: newAdmin, roomId: roomId});
-        io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: newAdmin + " is now the Admin of this room!", roomId: roomId});
+        io.sockets.to(roomId).emit('roomMessage', {sender: "Server", message: newAdmin + " is now the Admin of this room!", roomId: roomId}); 
 
- 
+    });
+
+    socket.on('privateMessage', function(data) {
+
+        let toUsername = data.username;
+        let messageContent = data.message;
+        let toSocket = allUsers.get(toUsername);
+
+        socket.to(toSocket.id).emit('privateMessageRecieve', {sender: socket.username, message: messageContent});
 
     });
 

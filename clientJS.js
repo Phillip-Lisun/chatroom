@@ -283,9 +283,20 @@ socketio.on('roomMessage', (data) => {
 
 function sendRoomMessage() {
 
+    let sendTo = document.getElementById('usersDropDown').value;
     let messageContent = document.getElementById("sendMessageText").value; 
 
-    socketio.emit("clientRoomMessage", {roomId: currentRoomId, username: username, message: messageContent});
+    if(sendTo === 'Everyone') {
+
+        socketio.emit("clientRoomMessage", {roomId: currentRoomId, username: username, message: messageContent});
+
+
+    }
+    else {
+        socketio.emit("privateMessage", {username: sendTo, message: messageContent});
+        document.getElementById('roomMessages').innerHTML += '<div class="userMessage">[Private to ' + sendTo + ']: ' + messageContent + '</div>'
+
+    }
 
 
 }
@@ -293,6 +304,12 @@ function sendRoomMessage() {
 socketio.on('messageAccepted', (data) => {
 
     document.getElementById('roomMessages').innerHTML += '<div class="userMessage">' + data.message + '</div>'
+
+});
+
+socketio.on('privateMessageRecieve', (data) => {
+
+    document.getElementById('roomMessages').innerHTML += '<div class="message">' + data.sender + " [Private]: " + data.message + '</div>';
 
 });
 
@@ -332,6 +349,7 @@ socketio.on('userList', (data) => {
     roomUsersDiv = document.getElementById("roomUsers");
 
     roomUsersDiv.innerHTML = "";
+    document.getElementById('usersDropDown').innerHTML = "<option value='Everyone's>Everyone</option>"
 
     userList = data;
 
@@ -378,6 +396,10 @@ socketio.on('userList', (data) => {
         adminElement.innerText = "Make Admin";
 
         document.getElementById('userElement-' + thisUser).appendChild(adminElement);
+
+    
+        document.getElementById('usersDropDown').innerHTML += "<option value=" + thisUser + ">" + thisUser + "</option>"
+
 
 
     }
