@@ -12,7 +12,7 @@
 
       <div id="usernameLabel">Set Username: </div>
 
-      <input type="text" id="username" name="username" placeholder="Username">
+      <input type="text" class="roomNameText" id="username" name="username" placeholder="Username">
       <!-- <textarea id='username' name='username' placeholder="Username" rows="1" cols="15"></textarea> -->
       <div class="smallButton" id="usernameButton">Enter</div>
 
@@ -24,33 +24,38 @@
 
 
       <div id="chatBox" class="chatBox">
-         <?xml version="1.0" encoding="utf-8"?>
-         <!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-         <svg version="1.1" id="backButton" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
-            <path d="M100,56v5c0,5.3-2.1,10.4-5.9,14.1C90.4,78.9,85.3,81,80,81H50V71h30c2.7,0,5.2-1.1,7.1-2.9c1.9-1.9,2.9-4.4,2.9-7.1v-5
-	c0-2.7-1.1-5.2-2.9-7.1C85.2,47.1,82.7,46,80,46H17.1l10,10L20,63.1L1.5,44.6C0.5,43.6,0,42.4,0,41s0.5-2.6,1.5-3.5L20,19l7.1,7.1
-	l-10,10H80c5.3,0,10.4,2.1,14.1,5.9C97.9,45.6,100,50.7,100,56z" />
-         </svg>
-
-         <div class="boxTitle"><b>Current Room: </b></div>
+         <div class="titleBar">
+            <?xml version="1.0" encoding="utf-8"?>
+            <!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+            <svg version="1.1" id="backButton" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+               x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+               <path d="M100,56v5c0,5.3-2.1,10.4-5.9,14.1C90.4,78.9,85.3,81,80,81H50V71h30c2.7,0,5.2-1.1,7.1-2.9c1.9-1.9,2.9-4.4,2.9-7.1v-5
+                  c0-2.7-1.1-5.2-2.9-7.1C85.2,47.1,82.7,46,80,46H17.1l10,10L20,63.1L1.5,44.6C0.5,43.6,0,42.4,0,41s0.5-2.6,1.5-3.5L20,19l7.1,7.1
+                  l-10,10H80c5.3,0,10.4,2.1,14.1,5.9C97.9,45.6,100,50.7,100,56z" />
+            </svg>
+            <div class="boxTitle"><b>Current Room: </b></div>
+         </div>
+         
          <hr>
 
          <div id="roomMessages" class="roomMessages">
 
-            <!-- <div class="message">Phillip: Message</div>
-            <div class="message">Phillip: Message</div>
-            <div class="userMessage">Message</div>
-            <div class="message">Phillip [private]: Message</div>
-            <div class="userMessage">Message</div> -->
-
          </div>
 
          <hr>
+
          <div class="sendMessage">
+            <div>
+               To:
+               <select id="usersDropDown" class="roomNameText"  name="users">
+                 <option value="everyone">Everyone</option>
+                 <option value="phil">phil</option>
+                 <option value="alice">alice</option>
+               </select>
+            </div>
+           
             <textarea class="sendMessageText" placeholder="Message" rows="2" cols="50" id="sendMessageText"></textarea>
             <div class="sendButton" id="sendButton">Send</div>
-
          </div>
 
 
@@ -60,7 +65,7 @@
       <div id="availRooms" class="chatBox">
          <div class="currRooms" id="currRooms">
             <div class="boxTitle" id="availableRoomsTitle">
-               Available Rooms:
+               <b>Available Rooms:</b>
             </div>
             <hr>
             <div class="roomNames" id="roomNames">
@@ -75,16 +80,18 @@
 
          <div class="createRoom">
 
-            <div class="boxTitle">Create Room:</div>
+            <div class="boxTitle"><b>Create Room:</b></div>
 
             <div class="formEntry">
-               <div class="formLabel">Name: </div><textarea id="roomNameText" class="roomNameText" placeholder="Room Name" rows="1"
-                  cols="20"></textarea>
+               <div class="formLabel">Name: </div>
+               <input type="text" id="roomNameText" class="roomNameText" name="roomName" placeholder="Room Name">
+               <!-- <textarea id="roomNameText" class="roomNameText" placeholder="Room Name" rows="1" cols="20"></textarea> -->
             </div>
 
             <div class="formEntry">
-               <div class="formLabel">Password: </div><textarea class="roomPasswordText"
-                  placeholder="Password (Optional)" rows="1" cols="20" id="roomPasswordText"></textarea>
+               <div class="formLabel">Password: </div>
+               <input type="text" class="roomNameText" id="roomPasswordText" name="roomPassword" placeholder="Password (Optional)">
+               <!-- <textarea class="roomPasswordText" placeholder="Password (Optional)" rows="1" cols="20" id="roomPasswordText"></textarea> -->
             </div>
 
             <div class="createRoomButton" id="createRoomButton">Create</div>
@@ -93,15 +100,20 @@
          <hr>
 
          <div class="currUsers" id="currUsers">
-            <div class="boxTitle">Current Room Users: </div>
+            <div class="boxTitle"><b>Current Room Users:</b></div>
             <div id="roomUsers" class="roomUsers">
-               <!-- <div class="roomUser">Alice</div>
-               <div class="roomUser">Phillip</div>
-               <div class="roomUser">Alice</div>
-               <div class="roomUser">Phillip</div>
-               <div class="roomUser">Alice</div>
-               <div class="roomUser">Phillip</div>
-               <div class="roomUser">Alice</div> -->
+               <div class="userElement">
+                  <div class="roomUsername"><b>Alice</b></div>
+                  <div class="roomElements">Kickout</div>
+                  <div class="roomElements">Ban</div>
+                  <div class="roomElements">MakeAdmin</div>
+               </div>
+               <div class="userElement">
+                  <div class="roomUsername"><b>phillip</b></div>
+                  <div class="roomElements">Kickout</div>
+                  <div class="roomElements">Ban</div>
+                  <div class="roomElements">MakeAdmin</div>
+               </div>
             </div>
          </div>
 

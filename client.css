@@ -4,14 +4,20 @@ body {
 }
 
 svg{
-    transform: scaleX(-1);
-    width: 80px;
+    /* transform: scaleX(-1); */
+    width: 35px;
+    float: left;
 }
 
 svg:hover{
-    width: 100px;
+    width: 40px;
     cursor: pointer;
-    background-color: #2C3639;
+    fill: #2C3639;
+}
+
+.titleBar{
+    display: flex;
+    justify-content: space-between;
 }
 
 .setUsername {
@@ -109,7 +115,6 @@ svg:hover{
     /* position: relative; */
 
 
-
     background-color:#DCD7C9;
 
 }
@@ -146,6 +151,7 @@ svg:hover{
     /* display: flex; */
     text-align: center;
     margin: 1%;
+    align-items: center;
     /* margin-left: 37%;
     margin-top: 1%; */
 }
@@ -167,11 +173,22 @@ svg:hover{
     justify-content: space-evenly;
 }
 
-.roomUser {
+.roomElements {
     flex-basis: 15%;
-    margin-bottom: 10px;
+    margin: 10px;
     padding: 2%;
+    flex-grow: 2;
+    font-size: 20px;
     text-align: center;
+    border: #2C3639 solid 1px;
+    border-radius: 10px;
+    width: auto;
+}
+
+.roomElements:hover{
+    background-color: #A27B5C;
+    color: #DCD7C9;
+    cursor: pointer;
 }
 
 .roomMessages {
@@ -222,9 +239,9 @@ svg:hover{
 }
 
 .sendMessage {
-    margin-left: 2%;
-
-
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .sendMessageText {
@@ -249,10 +266,8 @@ svg:hover{
 
 .sendButton:hover {
     background-color: #A27B5C;
-    color: #3F4E4F;
+    color: #DCD7C9;
     cursor: pointer;
-
-
 }
 
 .availableRooms {
@@ -287,9 +302,9 @@ svg:hover{
 
 .roomNameText {
     margin-top: 1%;
-    font-size: 25px;
+    font-size: 20px;
     border-radius: 10px;
-
+    padding: 1%;
 }
 
 .createRoomButton {
@@ -309,16 +324,27 @@ svg:hover{
 
 .createRoomButton:hover {
     background-color: #A27B5C;
-    color: #3F4E4F;
+    color: #DCD7C9;
     cursor: pointer;
-
-
 }
 
-
+#availRooms{
+    display: none;
+}
 .roomNames{
     display: flex;
     justify-content: space-evenly;
+}
+
+.userElement{
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+.roomUsername{
+    margin-right: 10%;
+    font-size: 30px;
 }
 
 
