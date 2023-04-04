@@ -411,7 +411,7 @@ socketio.on('password_request', (data) => {
 
 
 
-    });
+    }, {once : true});
 
     return;
 
