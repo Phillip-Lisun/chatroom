@@ -261,6 +261,10 @@ svg:hover{
 .sendMessageText {
     text-align: left;
     border-radius: 10px;
+    border: 1px white;
+    height: 8rem;
+    width: 50rem;
+
 }
 
 .sendButton {
