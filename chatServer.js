@@ -38,8 +38,18 @@ io.sockets.on("connection", function (socket) {
     socket.on('logon', function(data) {
 
         username = data.username;
+
+        if(allUsers.get(username) != null) {
+            socket.emit('username_taken', {});
+            return;
+        }
+
         socket.username = username;
         allUsers.set(username, socket);
+
+        socket.emit('user_handshake', {});
+
+
 
     });
 
