@@ -243,10 +243,11 @@ socketio.on('banUsersList', (data) => { //gets active ban users
 
     if (data.length == 0) {
 
-        unBanUsersDiv.innerHTML += "<div>No Users Banned Yet!! <br> Everyone has been a good child</div>";
+        unBanUsersDiv.innerHTML += "<div id='noBanUsersText'>No Users Banned Yet!! <br> Everyone has been a good child</div>";
 
     }
     else {
+        unBanUsersDiv.innerHTML += "<div id='banUsersText'>Click on the user you'd like to un-ban</div>";
 
         for (let i = 0; i < data.length; i++) {
             let banName = data[i];
