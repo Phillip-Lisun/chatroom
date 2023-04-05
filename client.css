@@ -170,6 +170,7 @@ svg:hover{
 .roomUsers {
     margin-top: 1%;
     display: flex;
+    overflow: auto;
     flex-wrap: wrap;
     justify-content: space-evenly;
     font-size: 3vw;
@@ -186,7 +187,7 @@ svg:hover{
     border-radius: 10px;
     width: auto;
 
-    display: none;
+    /* display: none; */
 }
 
 .roomElements:hover{
@@ -364,5 +365,18 @@ svg:hover{
 }
 
 
+#banUsersLink{
+    display: none;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.currBanUsers{
+    display: none;
+}
+
+.unban{
+    font-size: 30px;
+}
 /* https://colorhunt.co/palette/2c36393f4e4fa27b5cdcd7c9 */
 /* https://colorhunt.co/palette/a9907ef3debaabc4aa675d50 */

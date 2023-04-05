@@ -245,6 +245,47 @@ io.sockets.on("connection", function (socket) {
 
     });
 
+    socket.on('bannedUsersList', function(data){
+        displayAllBannedUsers(data.roomId);
+    });
+
+    socket.on('unban', function(data) {
+
+        let unbanName = data.name;
+
+        let currBlacklist = blackList.get(data.roomId);
+
+        for(let i = 0; i < currBlacklist.length; i++){
+            if(currBlacklist[i] == unbanName){
+                
+                currBlacklist.splice(i, 1);
+                console.log("curr list: " + currBlacklist);
+            }
+        }
+
+        // blackList.get(data.roomId) = currBlacklist;
+        blackList.set(data.roomId, currBlacklist);
+        console.log("done");
+
+        displayAllBannedUsers(data.roomId);
+        
+    });
+
+    function displayAllBannedUsers(roomId) {
+        console.log("Banned");
+
+        let currBlacklist = blackList.get(roomId);
+
+        console.log(currBlacklist);
+
+        if (currBlacklist != null){
+            io.emit('banUsersList', JSON.parse(JSON.stringify(currBlacklist)));
+        }
+        else{
+            io.emit('banUsersList', JSON.parse(JSON.stringify([])));
+        }
+    }
+
     function updateRooms() { //updates the room list
 
         for(let roomId of allRooms.keys()) {
