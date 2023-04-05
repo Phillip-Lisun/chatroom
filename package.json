@@ -1,0 +1,17 @@
+{
+  "name": "chatserver",
+  "version": "1.0.0",
+  "description": "a simple chat server for CSE330",
+  "main": "chat-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "phillip & alice",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "socket.io": "^4.6.1"
+  }
+}
