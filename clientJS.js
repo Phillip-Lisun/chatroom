@@ -7,14 +7,20 @@ let currentRoomId;
 let roomsCreated = [];
 
 
-Window.onload = onLoadFunction();
+Window.onload = onLoadFunction(0);
 
-function onLoadFunction() { //sets display
+function onLoadFunction(usernameCheck) { //sets display
 
+    username = "";
+    
     document.getElementById("mainArea").style.display = 'none';
     document.getElementById("setUsername").style.display = 'block';
     document.getElementById("createRoom").style.display = 'block';
     document.getElementById("usernameButton").addEventListener("click", setUsername, false);
+
+    if(usernameCheck == 1) {
+        alert('Username Taken!');
+    }
 
 }
 
@@ -22,23 +28,28 @@ function setUsername() {
 
     usernameEntry = document.getElementById("username").value + "";
 
+    usernameEntry = usernameEntry.trim();
+
     if (usernameEntry == "") {
         alert("Username Required");
     }
     else {
         username = usernameEntry;
 
-        document.getElementById("mainArea").style.display = 'flex';
-        document.getElementById("setUsername").style.display = 'none';
-        document.getElementById("chatBox").style.display = 'none';
-        document.getElementById("availRooms").style.display = 'block';
-        document.getElementById("currUsers").style.display = 'none';
-
         socketio.emit("logon", { username: username });
-
-        setCreateListener();
     }
 }
+
+socketio.on('user_handshake', (data) => {
+
+    document.getElementById("mainArea").style.display = 'flex';
+    document.getElementById("setUsername").style.display = 'none';
+    document.getElementById("chatBox").style.display = 'none';
+    document.getElementById("availRooms").style.display = 'block';
+    document.getElementById("currUsers").style.display = 'none';
+
+    setCreateListener();
+});
 
 //Event listeners to create a room
 function setCreateListener() {
@@ -470,6 +481,7 @@ socketio.on('password_request', (data) => {
     let pwd = '';
 
     document.getElementById("createRoom").style.display = 'none';
+    document.getElementById('availRooms').style.display = 'none';
     document.getElementById("pwdCheck").style.display = 'block';
 
     alert('Enter Password');
@@ -493,7 +505,16 @@ socketio.on('pwd_false', (data) => {
     document.getElementById("availRooms").style.display = 'block';
     document.getElementById("currUsers").style.display = 'none';
     document.getElementById("createRoom").style.display = 'block';
+    document.getElementById("pwdCheck").style.display = 'none';
+
 
     alert("incorrect password!");
+
+});
+
+socketio.on('username_taken', (data) => {
+
+
+    onLoadFunction(1);
 
 });
