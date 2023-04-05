@@ -45,7 +45,6 @@ function setCreateListener() {
 
     document.getElementById("createRoomButton").addEventListener('click', createRoom, false);
 
-
 }
 
 //event listeners to join a room
@@ -59,6 +58,7 @@ function setJoinListeners() {
         roomElements[i].addEventListener('click', e=> {
 
             let roomId = e.target.id;
+
             joinRoom(roomId);
 
         });
@@ -80,6 +80,8 @@ function createRoom() {
     document.getElementById("currUsers").style.display = 'block';
     document.getElementById("createRoom").style.display = 'none';
 
+    document.getElementById("displayRoomName").innerHTML = '<b>Current Room: </b>' + createRoomName;
+
     document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
 
@@ -88,6 +90,7 @@ function createRoom() {
 
 function joinRoom(roomId) {
 
+    document.getElementById("displayRoomName").innerHTML = '<b>Current Room: </b>' + roomId;
     document.getElementById("roomMessages").innerHTML = "";
     socketio.emit("join_room_request", {roomId: roomId, username: username});
 
@@ -96,7 +99,6 @@ function joinRoom(roomId) {
 socketio.on('joinHandshake', (data) => { //join confirmed by server, display changed
 
     currentRoomId = data.roomId;
-
 
     document.getElementById("chatBox").style.display = 'block';
     document.getElementById("availRooms").style.display='none';
