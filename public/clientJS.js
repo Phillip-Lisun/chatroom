@@ -221,7 +221,7 @@ function roomAdminElements() { //sets display for kick, ban, makeadmin
     document.getElementById('currBanUsers').style.display = "none";
 
     let roomElements = document.getElementsByClassName('roomElements');
-    let usernameElement = document.getElementsByClassName('roomUsername');
+    let usernameElement = document.getElementsByClassName('userElement');
 
     if (roomsCreated.indexOf(currentRoomId) == -1) {
 
@@ -229,9 +229,9 @@ function roomAdminElements() { //sets display for kick, ban, makeadmin
             roomElements[i].style.display = 'none';
         }
 
-        for(let i = 0; i < usernameElement.length; i++){
-            usernameElement[i].innerHTML += '<br>';
-        }
+        // for(let i = 0; i < usernameElement.length; i++){
+        //     usernameElement[i].innerHTML += '<br><br>';
+        // }
     }
     else {
         for (let i = 0; i < roomElements.length; i++) {
@@ -427,6 +427,17 @@ socketio.on('userList', (data) => { //displays all room users
         adminElement.innerText = "Make Admin";
 
         document.getElementById('userElement-' + thisUser).appendChild(adminElement);
+
+        
+
+        // <div class="break"></div>
+        let breakElem = document.createElement('div');
+        breakElem.setAttribute('class', 'break');
+
+
+        // var br = document.createElement("br");
+        document.getElementById('roomUsers').appendChild(breakElem);
+
 
 
         document.getElementById('usersDropDown').innerHTML += "<option value=" + thisUser + ">" + thisUser + "</option>"
