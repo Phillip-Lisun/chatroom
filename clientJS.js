@@ -214,11 +214,16 @@ function roomAdminElements() { //sets display for kick, ban, makeadmin
     document.getElementById('currBanUsers').style.display = "none";
 
     let roomElements = document.getElementsByClassName('roomElements');
+    let usernameElement = document.getElementsByClassName('roomUsername');
 
     if (roomsCreated.indexOf(currentRoomId) == -1) {
 
         for (let i = 0; i < roomElements.length; i++) {
             roomElements[i].style.display = 'none';
+        }
+
+        for(let i = 0; i < usernameElement.length; i++){
+            usernameElement[i].innerHTML += '<br>';
         }
     }
     else {
