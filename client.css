@@ -171,6 +171,7 @@ svg:hover{
     margin-top: 1%;
     display: flex;
     overflow: auto;
+    height: 16em;
     flex-wrap: wrap;
     justify-content: space-evenly;
     font-size: 3vw;
@@ -208,8 +209,7 @@ svg:hover{
     margin-top: 1%;
     background-color: #A9907E;
     border-radius: 10px;
-    height: 2rem;
-
+    height: auto;
 
     width: 70%;
 
@@ -239,7 +239,7 @@ svg:hover{
     background-color: #675D50;
     color: #DCD7C9;
     border-radius: 10px;
-    height: 2rem;
+    height: auto;
 
 
     width: 70%;
@@ -247,8 +247,9 @@ svg:hover{
     font-size: 23px;
 
     align-items: center;
-    float: left;
     padding: 1%;
+
+    display: inline-block;
 }
 
 .sendMessage {
@@ -369,6 +370,7 @@ svg:hover{
     display: none;
     text-align: center;
     margin-top: 10%;
+    font-size: 30px;
 }
 
 .currBanUsers{
@@ -377,6 +379,18 @@ svg:hover{
 
 .unban{
     font-size: 30px;
+}
+
+#noBanUsersText{
+    text-align: center;
+    margin-top: 10%;
+    font-size: 30px;
+}
+
+#banUsersText{
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 1%;
 }
 /* https://colorhunt.co/palette/2c36393f4e4fa27b5cdcd7c9 */
 /* https://colorhunt.co/palette/a9907ef3debaabc4aa675d50 */
