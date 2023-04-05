@@ -38,6 +38,9 @@ function setUsername() {
 
         socketio.emit("logon", { username: username });
     }
+
+    document.getElementById('username').value = '';
+
 }
 
 socketio.on('user_handshake', (data) => {
@@ -95,6 +98,10 @@ function createRoom() {
 
     document.getElementById("sendButton").addEventListener('click', sendRoomMessage, false);
     document.getElementById("backButton").addEventListener("click", showAvailRooms, false);
+
+    document.getElementById("roomNameText").value = "";
+    document.getElementById("roomPasswordText").value = "";
+
 
 
 }
@@ -329,6 +336,9 @@ function sendRoomMessage() { //sends message to room
         document.getElementById('roomMessages').innerHTML += '<div class="userMessage">[Private to ' + sendTo + ']: ' + messageContent + '</div>'
 
     }
+
+    document.getElementById("sendMessageText").value = '';
+
 }
 
 socketio.on('messageAccepted', (data) => { //message sent
@@ -496,7 +506,10 @@ socketio.on('password_request', (data) => {
 
         pwd = document.getElementById('pwdCheckText').value;
 
+        document.getElementById('pwdCheckText').value = '';
+
         socketio.emit('pwd_check', { pwd_attempt: pwd, username: username, roomId: roomId });
+
         return;
 
     }, { once: true });
