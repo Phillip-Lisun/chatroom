@@ -3,25 +3,28 @@ body {
     background-color: #2C3639;
 }
 
-svg{
+svg {
     /* transform: scaleX(-1); */
     width: 35px;
     float: left;
 }
 
-svg:hover{
+svg:hover {
     width: 40px;
     cursor: pointer;
     fill: #2C3639;
 }
 
-.titleBar{
+.titleBar {
     display: flex;
     justify-content: space-between;
 }
 
 .setUsername {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
     /* border: 4px solid #DCD7C9; */
     background-color: #ABC4AA;
     margin-left: 30%;
@@ -63,38 +66,37 @@ svg:hover{
     color: #3F4E4F;
 }
 
-.smallButton {
 
-    display: flex;
+.smBtn {
     align-items: center;
     justify-content: center;
-    align-items: center;
 
     font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
 
     background-color: #A27B5C;
     color: #DCD7C9;
+    border-radius: 10px;
+
+    width: auto;
+
+    padding: 1%;
+
+    margin-left: 28%;
+    margin-right: 28%;
 
     margin-top: 10px;
     margin-bottom: 5%;
-    margin-left: 35%;
-
-    height: 50px;
-    width: 300px;
-
-    border-radius: 10px;
-
 }
 
-.smallButton:hover {
+.smBtn:hover {
     cursor: pointer;
     color: #DCD7C9;
     background-color: #3F4E4F;
 }
 
-.mainArea{
-    display:flex;
+.mainArea {
+    display: flex;
     justify-content: space-evenly;
 }
 
@@ -116,14 +118,14 @@ svg:hover{
     /* position: relative; */
 
 
-    background-color:#DCD7C9;
+    background-color: #DCD7C9;
 
 }
 
-.overallSideBar{
+.overallSideBar {
     display: flex;
     flex-direction: column;
-    background-color:#DCD7C9;
+    background-color: #DCD7C9;
 }
 
 .sideBar {
@@ -139,7 +141,7 @@ svg:hover{
     border-radius: 10px;
 
 
-    background-color:#DCD7C9;
+    background-color: #DCD7C9;
 
     font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
@@ -191,7 +193,7 @@ svg:hover{
     /* display: none; */
 }
 
-.roomElements:hover{
+.roomElements:hover {
     background-color: #A27B5C;
     color: #DCD7C9;
     cursor: pointer;
@@ -221,11 +223,11 @@ svg:hover{
 
 }
 
-#unBanLink{
+#unBanLink {
     text-align: center;
 }
 
-#unBanLink:hover{
+#unBanLink:hover {
     cursor: pointer;
 }
 
@@ -255,14 +257,14 @@ svg:hover{
 .sendMessage {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: baseline;
 }
 
 .sendMessageText {
     text-align: left;
     border-radius: 10px;
     border: 1px white;
-    height: 8rem;
+    height: 3rem;
     width: 50rem;
 
 }
@@ -292,22 +294,26 @@ svg:hover{
     display: block;
 }
 
-.currRooms{
+.currRooms {
     text-align: center;
     margin: 1%;
     display: block;
+    flex-direction: column;
 }
 
 .createRoom {
-    display: block;
+    display: flex;
     justify-content: center;
+    align-content: center;
 
+    /* display: flex; */
 }
 
 .formEntry {
     margin-top: 2%;
     justify-content: center;
     margin-left: 25%;
+    min-width: 1;
 }
 
 .roomPasswordText {
@@ -334,8 +340,21 @@ svg:hover{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 25%;
-    margin-top: 2%;
+    margin: 1%;
+
+    color: #ABC4AA;
+}
+
+.regularBtn {
+    background-color: #3F4E4F;
+    border-radius: 10px;
+    height: 3rem;
+    width: 15rem;
+
+
+    justify-content: center;
+    align-items: center;
+    margin: 1%;
 
     color: #ABC4AA;
 }
@@ -346,21 +365,24 @@ svg:hover{
     cursor: pointer;
 }
 
-#availRooms{
+#availRooms {
     display: none;
 }
-.roomNames{
+
+.roomNames {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-evenly;
+    /* margin: 1%; */
 }
 
-.userElement{
+.userElement {
     display: flex;
     justify-content: space-around;
     align-items: baseline;
 }
 
-.roomUsername{
+.roomUsername {
     margin-right: 10%;
     font-size: 30px;
 }
@@ -370,31 +392,56 @@ svg:hover{
 }
 
 
-#banUsersLink{
+#banUsersLink {
     display: none;
     text-align: center;
     margin-top: 10%;
     font-size: 30px;
 }
 
-.currBanUsers{
+.currBanUsers {
     display: none;
 }
 
-.unban{
+.unban {
     font-size: 30px;
 }
 
-#noBanUsersText{
+#noBanUsersText {
     text-align: center;
     margin-top: 10%;
     font-size: 30px;
 }
 
-#banUsersText{
+#banUsersText {
     text-align: center;
     font-size: 24px;
     margin-bottom: 1%;
 }
+
+.btn {
+    background-color: #3F4E4F;
+    border-radius: 10px;
+    height: 3rem;
+    /* width: 15rem; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 1%;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-right: 20%;
+
+    color: #ABC4AA;
+}
+
+.btn:hover{
+    background-color: #A27B5C;
+    color: #DCD7C9;
+    cursor: pointer;
+}
+
 /* https://colorhunt.co/palette/2c36393f4e4fa27b5cdcd7c9 */
 /* https://colorhunt.co/palette/a9907ef3debaabc4aa675d50 */
