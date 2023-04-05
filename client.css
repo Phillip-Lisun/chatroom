@@ -68,6 +68,7 @@ svg:hover{
     display: flex;
     align-items: center;
     justify-content: center;
+    align-items: center;
 
     font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
@@ -171,6 +172,7 @@ svg:hover{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    font-size: 3vw;
 }
 
 .roomElements {
@@ -216,6 +218,14 @@ svg:hover{
     float: left;
     padding: 1%;
 
+}
+
+#unBanLink{
+    text-align: center;
+}
+
+#unBanLink:hover{
+    cursor: pointer;
 }
 
 .userMessage {
