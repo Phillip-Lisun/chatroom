@@ -15,3 +15,5 @@ Creative Portion:
 3. Text Message Position. Text messages that you send will appear in a dark brown on the right of the chatbox. Text messages recieved from other users or the server will appear in a lighter color on the left side of the chatbox. 
 4. Messages from the Server when a user is kicked, leaves, banned, joins, or is made admin.
 
+
+i cannot get your site to load. it says "cannot get /" please submit regrade
