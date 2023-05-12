@@ -17,3 +17,24 @@ Creative Portion:
 
 
 i cannot get your site to load. it says "cannot get /" please submit regrade
+
+# Regrade
+
+|Earned|Possible|Description|Explanation|
+|---|---|---|---|
+|5|5|User can create rooms with arbitrary name||
+|5|5|User can join arbitrary room||
+|5|5|Chat room displays all users currently in room||
+|5|5|password protected rooms||
+|3|3|Creators of rooms can temporarily kick others out of room||
+|2|2|Creators of chat rooms can perma-ban users from a room||
+|1|1|User's message shows their username and is sent to all in room||
+|4|4|User can send private messages to another user in the same room||
+|2|2|Code is well formatted||
+|1|2|Validates|-1pt for lang warning|
+|.5|1|node_modules is ignored by version control and you have package.json|```ignore.gitignore``` should be ```.gitignore```|
+|4|4|Communicating with others and joining rooms is easy and intuitive||
+|1|1|Site is visually appealing||
+|9|10|Creative portion|<ol|<li>Transfer admin privileges (5pts)</li><li>Unban feature (3pt) Not large enough to be 5pts, but good</li><li>Text message position. This is really only an aesthetic thing, so (1pt)</li><li>Messages from server is really just under usability, so can't give points for that</li></ol>|
+
+## 48.5/50
